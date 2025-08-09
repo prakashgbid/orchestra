@@ -1,0 +1,97 @@
+# Jekyll configuration for GitHub Pages
+title: Orchestra - LLM Orchestration Platform
+description: Coordinate multiple LLMs like a symphony conductor. Build consensus, run debates, and orchestrate AI models at scale.
+baseurl: "/orchestra"
+url: "https://prakashgbid.github.io"
+
+# Theme configuration
+theme: jekyll-theme-architect
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-relative-links
+
+# Navigation
+navigation:
+  - title: Home
+    url: /
+  - title: Getting Started
+    url: /getting-started
+  - title: Core Concepts
+    url: /concepts
+  - title: API Reference
+    url: /api
+  - title: Providers
+    url: /providers
+  - title: Examples
+    url: /examples
+  - title: Architecture
+    url: /architecture
+  - title: FAQ
+    url: /faq
+
+# Repository
+repository: prakashgbid/orchestra
+
+# Analytics (optional)
+google_analytics: # Add your GA tracking ID
+
+# Social
+twitter:
+  username: orchestrallm
+  card: summary_large_image
+
+# Exclude from build
+exclude:
+  - node_modules
+  - package.json
+  - package-lock.json
+  - "*.md"
+  - README.md
+  - CONTRIBUTING.md
+  - LICENSE
+
+# Include specific files
+include:
+  - docs
+
+# Markdown processing
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
+    span:
+      line_numbers: false
+    block:
+      line_numbers: true
+      start_line: 1
+
+# Collections
+collections:
+  guides:
+    output: true
+    permalink: /guides/:name
+  tutorials:
+    output: true
+    permalink: /tutorials/:name
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+      type: "guides"
+    values:
+      layout: "guide"
+  - scope:
+      path: ""
+      type: "tutorials"
+    values:
+      layout: "tutorial"

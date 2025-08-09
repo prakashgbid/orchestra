@@ -1,0 +1,19 @@
+---
+layout: default
+---
+
+<div class="home-layout">
+  {{ content }}
+</div>
+
+<script>
+  // Add fade-in animation to feature cards
+  document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.feature-card, .doc-card');
+    cards.forEach((card, index) => {
+      setTimeout(() => {
+        card.classList.add('fade-in');
+      }, index * 100);
+    });
+  });
+</script>
