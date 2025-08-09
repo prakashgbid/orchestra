@@ -1,7 +1,6 @@
 ---
-layout: page
+layout: default
 title: Getting Started with Orchestra
-permalink: /getting-started/
 ---
 
 # Getting Started with Orchestra

@@ -1,11 +1,11 @@
 # Jekyll configuration for GitHub Pages
 title: Orchestra - LLM Orchestration Platform
 description: Coordinate multiple LLMs like a symphony conductor. Build consensus, run debates, and orchestrate AI models at scale.
-baseurl: "/orchestra"
-url: "https://prakashgbid.github.io"
+baseurl: ""
+url: "https://prakashgbid.github.io/orchestra"
 
 # Theme configuration
-theme: jekyll-theme-architect
+remote_theme: pages-themes/cayman@v0.2.0
 plugins:
   - jekyll-seo-tag
   - jekyll-sitemap

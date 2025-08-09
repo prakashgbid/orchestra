@@ -1,5 +1,5 @@
 ---
-layout: home
+layout: default
 title: Orchestra - LLM Orchestration Platform
 ---
 

@@ -1,7 +1,6 @@
 ---
-layout: page
+layout: default
 title: Core Concepts
-permalink: /concepts/
 ---
 
 # Core Concepts

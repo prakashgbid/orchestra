@@ -1,7 +1,6 @@
 ---
-layout: page
+layout: default
 title: Provider Guide
-permalink: /providers/
 ---
 
 # Provider Guide
