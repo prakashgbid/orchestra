@@ -5,79 +5,508 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orchestra - LLM Orchestration Platform</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --border: #e5e7eb;
+            --text: #374151;
+            --text-light: #6b7280;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
-            max-width: 900px;
-            margin: 0 auto;
+            color: var(--text);
+            background: var(--light);
+        }
+
+        /* Layout Container */
+        .layout-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Left Sidebar - Navigation */
+        .left-sidebar {
+            width: 250px;
+            background: white;
+            border-right: 1px solid var(--border);
             padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
         }
-        h1 { color: #6366f1; }
-        h2 { color: #8b5cf6; }
-        .nav {
-            background: #f5f5f5;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .nav a {
-            margin-right: 15px;
-            color: #6366f1;
+
+        .nav-section {
+            margin-bottom: 25px;
+        }
+
+        .nav-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 8px 12px;
+            color: var(--text);
             text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 3px;
+            transition: all 0.2s;
         }
-        .nav a:hover { text-decoration: underline; }
-        pre {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 5px;
-            overflow-x: auto;
+
+        .nav-item:hover {
+            background: var(--light);
+            color: var(--primary);
         }
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #6366f1;
+
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-right: 10px;
         }
-        .button:hover { background: #5558dd; }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            margin-right: 250px;
+            padding: 40px 60px;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        /* Right Sidebar - Table of Contents */
+        .right-sidebar {
+            width: 250px;
+            padding: 40px 20px;
+            position: fixed;
+            right: 0;
+            height: 100vh;
+            overflow-y: auto;
+            background: white;
+            border-left: 1px solid var(--border);
+        }
+
+        .toc-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .toc-item {
+            display: block;
+            padding: 6px 0;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 14px;
+            border-left: 2px solid transparent;
+            padding-left: 10px;
+            margin-left: -10px;
+            transition: all 0.2s;
+        }
+
+        .toc-item:hover {
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .toc-item.active {
+            color: var(--primary);
+            border-left-color: var(--primary);
+            font-weight: 600;
+        }
+
+        .toc-item.sub {
+            padding-left: 25px;
+            font-size: 13px;
+        }
+
+        /* Content Styles */
+        h1 {
+            color: var(--dark);
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        h2 {
+            color: var(--dark);
+            font-size: 32px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        h2:first-of-type {
+            border-top: none;
+            padding-top: 0;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: var(--dark);
+            font-size: 24px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 20px;
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 15px;
+        }
+
+        .button-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .button-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .button-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .button-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        pre {
+            background: var(--dark);
+            color: #e5e7eb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        code {
+            background: #f3f4f6;
+            color: var(--primary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-family: 'Courier New', monospace;
+        }
+
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-color: var(--primary);
+        }
+
+        .feature-card h3 {
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .feature-card p {
+            margin: 0;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .badge-new {
+            background: #10b981;
+            color: white;
+        }
+
+        .badge-beta {
+            background: #f59e0b;
+            color: white;
+        }
+
+        ul {
+            margin: 20px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        /* Footer in left sidebar */
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .sidebar-footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .right-sidebar {
+                display: none;
+            }
+            .main-content {
+                margin-right: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .left-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+            .left-sidebar.mobile-open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            h1 {
+                font-size: 36px;
+            }
+            h2 {
+                font-size: 24px;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Highlight target section */
+        :target {
+            animation: highlight 2s;
+        }
+
+        @keyframes highlight {
+            0% { background: rgba(99, 102, 241, 0.1); }
+            100% { background: transparent; }
+        }
     </style>
 </head>
 <body>
-    <div class="nav">
-        <a href="/">Home</a>
-        <a href="/getting-started.html">Getting Started</a>
-        <a href="/api.html">API</a>
-        <a href="/providers.html">Providers</a>
-        <a href="/examples.html">Examples</a>
-        <a href="https://github.com/prakashgbid/orchestra">GitHub</a>
-    </div>
+    <div class="layout-container">
+        <!-- Left Sidebar - Navigation -->
+        <nav class="left-sidebar">
+            <div class="logo">
+                <span>🎼</span>
+                <span>Orchestra</span>
+            </div>
 
-    <h1>Orchestra 🎼</h1>
-    <h2>Coordinate Multiple LLMs Like a Symphony Conductor</h2>
-    
-    <p>Orchestra is the <strong>Kubernetes for LLMs</strong> - a powerful orchestration platform that coordinates multiple language models to work together harmoniously. Build consensus, run structured debates, and leverage the collective intelligence of AI.</p>
+            <div class="nav-section">
+                <div class="nav-section-title">Getting Started</div>
+                <a href="#" class="nav-item active">Introduction</a>
+                <a href="#quick-start" class="nav-item">Quick Start</a>
+                <a href="#installation" class="nav-item">Installation</a>
+                <a href="#basic-example" class="nav-item">Basic Example</a>
+            </div>
 
-    <p>
-        <a href="https://github.com/prakashgbid/orchestra" class="button">View on GitHub</a>
-        <a href="https://www.npmjs.com/package/@orchestra-llm/core" class="button">NPM Package</a>
-    </p>
+            <div class="nav-section">
+                <div class="nav-section-title">Core Concepts</div>
+                <a href="#consensus" class="nav-item">Consensus Building</a>
+                <a href="#debates" class="nav-item">Structured Debates</a>
+                <a href="#providers" class="nav-item">Provider System</a>
+                <a href="#orchestration" class="nav-item">Orchestration</a>
+            </div>
 
-    <h2>🚀 Quick Start</h2>
-    
-    <pre><code>npm install @orchestra-llm/core</code></pre>
+            <div class="nav-section">
+                <div class="nav-section-title">API Reference</div>
+                <a href="#api-orchestra" class="nav-item">Orchestra Class</a>
+                <a href="#api-methods" class="nav-item">Methods</a>
+                <a href="#api-types" class="nav-item">Types</a>
+                <a href="#api-events" class="nav-item">Events</a>
+            </div>
 
-    <h2>📝 Basic Example</h2>
-    
-    <pre><code>import { Orchestra } from '@orchestra-llm/core'
+            <div class="nav-section">
+                <div class="nav-section-title">Providers</div>
+                <a href="#provider-openai" class="nav-item">OpenAI</a>
+                <a href="#provider-claude" class="nav-item">Claude</a>
+                <a href="#provider-gemini" class="nav-item">Gemini</a>
+                <a href="#provider-custom" class="nav-item">Custom Providers</a>
+            </div>
 
+            <div class="nav-section">
+                <div class="nav-section-title">Resources</div>
+                <a href="https://github.com/prakashgbid/orchestra" class="nav-item">GitHub</a>
+                <a href="https://www.npmjs.com/package/@orchestra-llm/core" class="nav-item">NPM Package</a>
+                <a href="#" class="nav-item">Discord</a>
+                <a href="#" class="nav-item">Twitter</a>
+            </div>
+
+            <div class="sidebar-footer">
+                <p>Version 1.0.0</p>
+                <p><a href="https://github.com/prakashgbid/orchestra/blob/main/LICENSE">MIT License</a></p>
+                <p>&copy; 2024 Orchestra</p>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <h1>Orchestra Documentation</h1>
+            <p class="subtitle">Coordinate multiple LLMs like a symphony conductor. Build consensus, run debates, and orchestrate AI models at scale.</p>
+
+            <div class="hero-buttons">
+                <a href="#quick-start" class="button button-primary">
+                    <span>⚡</span>
+                    <span>Get Started</span>
+                </a>
+                <a href="https://github.com/prakashgbid/orchestra" class="button button-secondary">
+                    <span>📦</span>
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+
+            <h2 id="introduction">🎯 Why Orchestra?</h2>
+            <p>In the rapidly evolving world of AI, relying on a single LLM is like listening to a solo performance when you could have a full symphony. Orchestra brings together the best of all models, creating a powerful orchestration platform that coordinates multiple language models to work together harmoniously.</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🤝 Consensus Building</h3>
+                    <p>Get validated answers through multi-model agreement. Reduce hallucinations by up to 70%.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🎭 Structured Debates</h3>
+                    <p>Let models debate complex topics through multiple rounds for nuanced conclusions.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔌 Provider Agnostic</h3>
+                    <p>Support for unlimited LLM providers with hot-swappable configurations.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⚡ High Performance</h3>
+                    <p>Parallel processing, intelligent caching, and optimized token usage.</p>
+                </div>
+            </div>
+
+            <h2 id="quick-start">🚀 Quick Start</h2>
+            <p>Get up and running with Orchestra in under 5 minutes. Follow these simple steps to start orchestrating multiple LLMs.</p>
+
+            <h3 id="installation">Installation</h3>
+            <p>Install Orchestra using your preferred package manager:</p>
+            
+            <pre><code># Using npm
+npm install @orchestra-llm/core
+
+# Using yarn
+yarn add @orchestra-llm/core
+
+# Using pnpm
+pnpm add @orchestra-llm/core</code></pre>
+
+            <h3 id="basic-example">Basic Example</h3>
+            <p>Here's a simple example to get you started with Orchestra:</p>
+
+            <pre><code>import { Orchestra } from '@orchestra-llm/core'
+
+// Initialize Orchestra with your providers
 const orchestra = new Orchestra({
   providers: {
-    openai: { apiKey: process.env.OPENAI_KEY },
-    anthropic: { apiKey: process.env.ANTHROPIC_KEY },
-    google: { apiKey: process.env.GOOGLE_KEY }
+    openai: { 
+      apiKey: process.env.OPENAI_API_KEY 
+    },
+    anthropic: { 
+      apiKey: process.env.ANTHROPIC_API_KEY 
+    },
+    google: { 
+      apiKey: process.env.GOOGLE_API_KEY 
+    }
   }
 })
 
@@ -86,40 +515,213 @@ const consensus = await orchestra.consensus(
   'What is the best approach for handling user authentication?'
 )
 
-console.log(consensus.result)     // Unified answer
-console.log(consensus.confidence) // 0.92 (92% agreement)</code></pre>
+console.log('Result:', consensus.result)
+console.log('Confidence:', consensus.confidence)
+console.log('Agreement:', consensus.agreement)</code></pre>
 
-    <h2>🌟 Key Features</h2>
-    <ul>
-        <li><strong>Consensus Building</strong> - Get validated answers through multi-model agreement</li>
-        <li><strong>Structured Debates</strong> - Let models debate complex topics through multiple rounds</li>
-        <li><strong>Provider Agnostic</strong> - Support for unlimited LLM providers</li>
-        <li><strong>High Performance</strong> - Parallel processing and intelligent caching</li>
-        <li><strong>Production Ready</strong> - Error handling, retry logic, and monitoring</li>
-    </ul>
+            <h2 id="consensus">🤝 Consensus Building</h2>
+            <p>Consensus is Orchestra's fundamental mechanism for getting validated, reliable answers from multiple models. By combining responses from different LLMs, Orchestra significantly reduces errors and hallucinations.</p>
 
-    <h2>📚 Documentation</h2>
-    <p>Full documentation is available in the repository:</p>
-    <ul>
-        <li><a href="https://github.com/prakashgbid/orchestra/blob/main/docs/getting-started.md">Getting Started Guide</a></li>
-        <li><a href="https://github.com/prakashgbid/orchestra/blob/main/docs/api.md">API Reference</a></li>
-        <li><a href="https://github.com/prakashgbid/orchestra/blob/main/docs/providers.md">Provider Configuration</a></li>
-        <li><a href="https://github.com/prakashgbid/orchestra/blob/main/docs/examples.md">Examples</a></li>
-        <li><a href="https://github.com/prakashgbid/orchestra/blob/main/docs/architecture.md">Architecture</a></li>
-        <li><a href="https://github.com/prakashgbid/orchestra/blob/main/docs/faq.md">FAQ</a></li>
-    </ul>
+            <h3>How It Works</h3>
+            <ul>
+                <li>Send the same prompt to multiple providers in parallel</li>
+                <li>Analyze responses for semantic similarity</li>
+                <li>Calculate agreement scores using advanced algorithms</li>
+                <li>Synthesize a unified answer based on consensus</li>
+                <li>Return confidence metrics for transparency</li>
+            </ul>
 
-    <h2>🤝 Community</h2>
-    <ul>
-        <li><a href="https://github.com/prakashgbid/orchestra">GitHub Repository</a></li>
-        <li><a href="https://discord.gg/orchestra">Discord Community</a></li>
-        <li><a href="https://twitter.com/orchestrallm">Twitter @orchestrallm</a></li>
-    </ul>
+            <h3>Consensus Modes</h3>
+            <pre><code>// Democratic - Equal weight for all models
+const result = await orchestra.consensus(prompt, {
+  mode: 'democratic'
+})
 
-    <h2>📄 License</h2>
-    <p>Orchestra is MIT licensed. Use it freely in your projects.</p>
+// Weighted - Different weights based on expertise
+const result = await orchestra.consensus(prompt, {
+  mode: 'weighted',
+  weights: {
+    openai: 2,
+    anthropic: 1.5,
+    google: 1
+  }
+})
 
-    <hr>
-    <p>&copy; 2024 Orchestra Contributors</p>
+// Hierarchical - Tiered decision making
+const result = await orchestra.consensus(prompt, {
+  mode: 'hierarchical',
+  hierarchy: {
+    tier1: ['openai'],
+    tier2: ['anthropic'],
+    tier3: ['google']
+  }
+})</code></pre>
+
+            <h2 id="debates">🎭 Structured Debates</h2>
+            <p>Debates allow models to challenge each other iteratively, leading to more nuanced and well-reasoned conclusions. Models can see each other's responses and revise their positions.</p>
+
+            <pre><code>const debate = await orchestra.debate(
+  'Should startups use microservices or monolithic architecture?',
+  {
+    maxRounds: 3,
+    threshold: 0.8,
+    style: 'adversarial'
+  }
+)
+
+// Examine the debate process
+debate.rounds.forEach((round, index) => {
+  console.log(`Round ${index + 1}:`)
+  round.arguments.forEach(arg => {
+    console.log(`${arg.provider}: ${arg.content}`)
+  })
+})</code></pre>
+
+            <h2 id="providers">🔌 Provider Configuration</h2>
+            <p>Orchestra supports a growing ecosystem of LLM providers. Each provider can be configured with specific parameters and capabilities.</p>
+
+            <h3>Supported Providers</h3>
+            <ul>
+                <li><span class="badge badge-new">Stable</span> OpenAI (GPT-4, GPT-3.5)</li>
+                <li><span class="badge badge-new">Stable</span> Anthropic (Claude 3)</li>
+                <li><span class="badge badge-new">Stable</span> Google (Gemini)</li>
+                <li><span class="badge badge-new">Stable</span> Cohere</li>
+                <li><span class="badge badge-new">Stable</span> Hugging Face</li>
+                <li><span class="badge badge-beta">Beta</span> Azure OpenAI</li>
+                <li><span class="badge badge-beta">Beta</span> AWS Bedrock</li>
+            </ul>
+
+            <h2 id="advanced">🔧 Advanced Features</h2>
+            <p>Orchestra includes powerful features for production use:</p>
+
+            <h3>Automatic Failover</h3>
+            <pre><code>const orchestra = new Orchestra({
+  fallback: {
+    enabled: true,
+    strategy: 'priority',
+    maxAttempts: 3
+  }
+})</code></pre>
+
+            <h3>Response Streaming</h3>
+            <pre><code>const stream = await orchestra.stream(prompt)
+for await (const chunk of stream) {
+  process.stdout.write(chunk.content)
+}</code></pre>
+
+            <h3>Custom Providers</h3>
+            <pre><code>class CustomProvider extends BaseProvider {
+  async complete(prompt, options) {
+    // Your implementation
+    return response
+  }
+}
+
+orchestra.addProvider('custom', new CustomProvider())</code></pre>
+
+            <h2>📊 Performance & Monitoring</h2>
+            <p>Track and optimize your orchestration performance with built-in metrics:</p>
+
+            <pre><code>// Listen to events
+orchestra.on('consensus:complete', (result) => {
+  console.log('Consensus reached:', result)
+})
+
+// Get statistics
+const stats = orchestra.getStats()
+console.log('Total requests:', stats.totalRequests)
+console.log('Average latency:', stats.averageLatency)
+console.log('Provider usage:', stats.providerUsage)</code></pre>
+
+            <h2>🚢 Ready to Ship?</h2>
+            <p>Orchestra is production-ready with comprehensive features for building reliable AI applications. Join thousands of developers who are already orchestrating their LLMs.</p>
+
+            <div class="hero-buttons">
+                <a href="https://github.com/prakashgbid/orchestra" class="button button-primary">
+                    <span>🚀</span>
+                    <span>Start Building</span>
+                </a>
+                <a href="https://discord.gg/orchestra" class="button button-secondary">
+                    <span>💬</span>
+                    <span>Join Community</span>
+                </a>
+            </div>
+        </main>
+
+        <!-- Right Sidebar - Table of Contents -->
+        <aside class="right-sidebar">
+            <div class="toc-title">On This Page</div>
+            <nav class="toc">
+                <a href="#introduction" class="toc-item">Why Orchestra?</a>
+                <a href="#quick-start" class="toc-item">Quick Start</a>
+                <a href="#installation" class="toc-item sub">Installation</a>
+                <a href="#basic-example" class="toc-item sub">Basic Example</a>
+                <a href="#consensus" class="toc-item">Consensus Building</a>
+                <a href="#debates" class="toc-item">Structured Debates</a>
+                <a href="#providers" class="toc-item">Provider Configuration</a>
+                <a href="#advanced" class="toc-item">Advanced Features</a>
+            </nav>
+
+            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border);">
+                <div class="toc-title">Quick Links</div>
+                <a href="https://github.com/prakashgbid/orchestra/blob/main/README.md" class="toc-item">README</a>
+                <a href="https://github.com/prakashgbid/orchestra/issues" class="toc-item">Report Issue</a>
+                <a href="https://www.npmjs.com/package/@orchestra-llm/core" class="toc-item">NPM Package</a>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Highlight active section in table of contents
+        const observerOptions = {
+            rootMargin: '-100px 0px -70% 0px',
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const id = entry.target.getAttribute('id');
+                const tocItem = document.querySelector(`.toc-item[href="#${id}"]`);
+                
+                if (tocItem) {
+                    if (entry.isIntersecting) {
+                        document.querySelectorAll('.toc-item').forEach(item => {
+                            item.classList.remove('active');
+                        });
+                        tocItem.classList.add('active');
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections with IDs
+        document.querySelectorAll('h2[id], h3[id]').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Smooth scroll for navigation items
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Active nav item highlighting
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                document.querySelectorAll('.nav-item').forEach(navItem => {
+                    navItem.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+    </script>
 </body>
 </html>
