@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orchestra - LLM Orchestration Platform</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 { color: #6366f1; }
+        h2 { color: #8b5cf6; }
+        .nav {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .nav a {
+            margin-right: 15px;
+            color: #6366f1;
+            text-decoration: none;
+        }
+        .nav a:hover { text-decoration: underline; }
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #6366f1;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .button:hover { background: #5558dd; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/getting-started.html">Getting Started</a>
+        <a href="/api.html">API</a>
+        <a href="/providers.html">Providers</a>
+        <a href="/examples.html">Examples</a>
+        <a href="https://github.com/prakashgbid/orchestra">GitHub</a>
+    </div>
+
+    <h1>Orchestra 🎼</h1>
+    <h2>Coordinate Multiple LLMs Like a Symphony Conductor</h2>
+    
+    <p>Orchestra is the <strong>Kubernetes for LLMs</strong> - a powerful orchestration platform that coordinates multiple language models to work together harmoniously. Build consensus, run structured debates, and leverage the collective intelligence of AI.</p>
+
+    <p>
+        <a href="https://github.com/prakashgbid/orchestra" class="button">View on GitHub</a>
+        <a href="https://www.npmjs.com/package/@orchestra-llm/core" class="button">NPM Package</a>
+    </p>
+
+    <h2>🚀 Quick Start</h2>
+    
+    <pre><code>npm install @orchestra-llm/core</code></pre>
+
+    <h2>📝 Basic Example</h2>
+    
+    <pre><code>import { Orchestra } from '@orchestra-llm/core'
+
+const orchestra = new Orchestra({
+  providers: {
+    openai: { apiKey: process.env.OPENAI_KEY },
+    anthropic: { apiKey: process.env.ANTHROPIC_KEY },
+    google: { apiKey: process.env.GOOGLE_KEY }
+  }
+})
+
+// Get consensus from multiple models
+const consensus = await orchestra.consensus(
+  'What is the best approach for handling user authentication?'
+)
+
+console.log(consensus.result)     // Unified answer
+console.log(consensus.confidence) // 0.92 (92% agreement)</code></pre>
+
+    <h2>🌟 Key Features</h2>
+    <ul>
+        <li><strong>Consensus Building</strong> - Get validated answers through multi-model agreement</li>
+        <li><strong>Structured Debates</strong> - Let models debate complex topics through multiple rounds</li>
+        <li><strong>Provider Agnostic</strong> - Support for unlimited LLM providers</li>
+        <li><strong>High Performance</strong> - Parallel processing and intelligent caching</li>
+        <li><strong>Production Ready</strong> - Error handling, retry logic, and monitoring</li>
+    </ul>
+
+    <h2>📚 Documentation</h2>
+    <p>Full documentation is available in the repository:</p>
+    <ul>
+        <li><a href="https://github.com/prakashgbid/orchestra/blob/main/docs/getting-started.md">Getting Started Guide</a></li>
+        <li><a href="https://github.com/prakashgbid/orchestra/blob/main/docs/api.md">API Reference</a></li>
+        <li><a href="https://github.com/prakashgbid/orchestra/blob/main/docs/providers.md">Provider Configuration</a></li>
+        <li><a href="https://github.com/prakashgbid/orchestra/blob/main/docs/examples.md">Examples</a></li>
+        <li><a href="https://github.com/prakashgbid/orchestra/blob/main/docs/architecture.md">Architecture</a></li>
+        <li><a href="https://github.com/prakashgbid/orchestra/blob/main/docs/faq.md">FAQ</a></li>
+    </ul>
+
+    <h2>🤝 Community</h2>
+    <ul>
+        <li><a href="https://github.com/prakashgbid/orchestra">GitHub Repository</a></li>
+        <li><a href="https://discord.gg/orchestra">Discord Community</a></li>
+        <li><a href="https://twitter.com/orchestrallm">Twitter @orchestrallm</a></li>
+    </ul>
+
+    <h2>📄 License</h2>
+    <p>Orchestra is MIT licensed. Use it freely in your projects.</p>
+
+    <hr>
+    <p>&copy; 2024 Orchestra Contributors</p>
+</body>
+</html>
