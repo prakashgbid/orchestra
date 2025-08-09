@@ -1,0 +1,46 @@
+{
+  "name": "@orchestra/monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Orchestra - LLM Orchestration Platform",
+  "homepage": "https://github.com/prakashgbid/orchestra",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prakashgbid/orchestra.git"
+  },
+  "keywords": [
+    "llm",
+    "orchestration",
+    "multi-model",
+    "ai-infrastructure",
+    "consensus",
+    "chatgpt",
+    "claude",
+    "gemini",
+    "ai-gateway",
+    "mcp"
+  ],
+  "author": "Orchestra Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/prakashgbid/orchestra/issues"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces",
+    "dev": "npm run dev --workspace=@orchestra/core",
+    "publish-packages": "npm publish --workspaces --access public"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.0",
+    "prettier": "^3.2.0",
+    "eslint": "^8.56.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0"
+  }
+}
