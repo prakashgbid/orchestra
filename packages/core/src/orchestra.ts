@@ -9,22 +9,24 @@ import {
   ConsensusResult, 
   DebateOptions,
   DebateResult,
+  DebateRound,
   QueryOptions,
-  Response 
+  Response,
+  ProviderConfig
 } from './types'
 import { ProviderRegistry } from './registry'
 import { ConsensusEngine } from './consensus'
 
 export class Orchestra extends EventEmitter {
   private registry: ProviderRegistry
-  private consensus: ConsensusEngine
+  private consensusEngine: ConsensusEngine
   private config: OrchestraConfig
 
   constructor(config: OrchestraConfig) {
     super()
     this.config = config
     this.registry = new ProviderRegistry()
-    this.consensus = new ConsensusEngine(this.registry)
+    this.consensusEngine = new ConsensusEngine(this.registry)
     
     this.initialize()
   }
@@ -67,7 +69,7 @@ export class Orchestra extends EventEmitter {
   async consensus(prompt: string, options?: ConsensusOptions): Promise<ConsensusResult> {
     this.emit('consensus:start', { prompt, options })
     
-    const result = await this.consensus.buildConsensus(prompt, options)
+    const result = await this.consensusEngine.buildConsensus(prompt, options)
     
     this.emit('consensus:complete', result)
     return result
@@ -166,7 +168,7 @@ export class Orchestra extends EventEmitter {
   private buildDebatePrompt(originalPrompt: string, rounds: DebateRound[]): string {
     const lastRound = rounds[rounds.length - 1]
     const perspectives = lastRound.arguments
-      .map((arg, i) => `${arg.provider}: ${arg.content.substring(0, 200)}...`)
+      .map((arg) => `${arg.provider}: ${arg.content.substring(0, 200)}...`)
       .join('\n')
 
     return `
