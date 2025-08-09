@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Discord Community
+    url: https://discord.gg/orchestra
+    about: Get help from the community and discuss Orchestra
+  - name: Documentation
+    url: https://prakashgbid.github.io/orchestra/
+    about: Check our documentation for guides and examples
+  - name: Twitter
+    url: https://twitter.com/orchestrallm
+    about: Follow us for updates and announcements
